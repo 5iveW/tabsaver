@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <title>WilmerBoard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .board {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      padding: 20px;
+    }
+    .group {
+      background: #1e1e1e;
+      padding: 15px;
+      border-radius: 12px;
+      width: 260px;
+    }
+    .group h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+    .link-list {
+      list-style: none;
+      padding: 0;
+    }
+    .link-list li {
+      margin: 6px 0;
+    }
+    .link-list a {
+      color: #61dafb;
+      text-decoration: none;
+      word-break: break-all;
+    }
+    .btn {
+      background: #333;
+      border: none;
+      padding: 8px 10px;
+      color: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .top-controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>WilmerBoard</h1>
+  <div class="top-controls">
+    <button class="btn" onclick="addGroup()">➕ Ny kategori</button>
+  </div>
+  <div class="board" id="board"></div>
+
+  <script>
+    let data = JSON.parse(localStorage.getItem("wilmerBoard")) || [];
+
+    function save() {
+      localStorage.setItem("wilmerBoard", JSON.stringify(data));
+    }
+
+    function render() {
+      const board = document.getElementById("board");
+      board.innerHTML = "";
+      data.forEach((group, groupIndex) => {
+        const div = document.createElement("div");
+        div.className = "group";
+        div.innerHTML = `
+          <h2>${group.name}</h2>
+          <ul class="link-list" id="group-${groupIndex}"></ul>
+          <button class="btn" onclick="addLink(${groupIndex})">➕ Lägg till länk</button>
+        `;
+        board.appendChild(div);
+
+        const list = div.querySelector(".link-list");
+        group.links.forEach(link => {
+          const li = document.createElement("li");
+          li.innerHTML = `<a href="${link}" target="_blank">${link}</a>`;
+          list.appendChild(li);
+        });
+      });
+    }
+
+    function addGroup() {
+      const name = prompt("Namn på ny kategori:");
+      if (name) {
+        data.push({ name, links: [] });
+        save();
+        render();
+      }
+    }
+
+    function addLink(index) {
+      const url = prompt("Länk att lägga till:");
+      if (url) {
+        data[index].links.push(url);
+        save();
+        render();
+      }
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
