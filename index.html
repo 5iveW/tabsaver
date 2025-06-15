@@ -2,7 +2,7 @@
 <html lang="sv">
 <head>
   <meta charset="UTF-8">
-  <title>WilmerBoard</title>
+  <title>TabSaver</title>
   <style>
     body {
       margin: 0;
@@ -62,17 +62,17 @@
 </head>
 <body>
 
-  <h1>WilmerBoard</h1>
+  <h1>TabSaver</h1>
   <div class="top-controls">
-    <button class="btn" onclick="addGroup()">➕ Ny kategori</button>
+    <button class="btn" onclick="addGroup()">➕ New Category</button>
   </div>
   <div class="board" id="board"></div>
 
   <script>
-    let data = JSON.parse(localStorage.getItem("wilmerBoard")) || [];
+    let data = JSON.parse(localStorage.getItem("TabSaver")) || [];
 
     function save() {
-      localStorage.setItem("wilmerBoard", JSON.stringify(data));
+      localStorage.setItem("TabSaver", JSON.stringify(data));
     }
 
     function render() {
@@ -84,7 +84,7 @@
         div.innerHTML = `
           <h2>${group.name}</h2>
           <ul class="link-list" id="group-${groupIndex}"></ul>
-          <button class="btn" onclick="addLink(${groupIndex})">➕ Lägg till länk</button>
+          <button class="btn" onclick="addLink(${groupIndex})">➕ Add Link</button>
         `;
         board.appendChild(div);
 
@@ -98,7 +98,7 @@
     }
 
     function addGroup() {
-      const name = prompt("Namn på ny kategori:");
+      const name = prompt("New category name:");
       if (name) {
         data.push({ name, links: [] });
         save();
@@ -107,7 +107,7 @@
     }
 
     function addLink(index) {
-      const url = prompt("Länk att lägga till:");
+      const url = prompt("Link to add:");
       if (url) {
         data[index].links.push(url);
         save();
